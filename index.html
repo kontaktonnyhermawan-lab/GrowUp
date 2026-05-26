@@ -2,345 +2,912 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="GrowUp">
-<meta name="theme-color" content="#7c3aed">
-<link rel="manifest" href="data:application/json,{&quot;name&quot;:&quot;GrowUp&quot;,&quot;short_name&quot;:&quot;GrowUp&quot;,&quot;start_url&quot;:&quot;./&quot;,&quot;display&quot;:&quot;standalone&quot;,&quot;background_color&quot;:&quot;#ffffff&quot;,&quot;theme_color&quot;:&quot;#7c3aed&quot;,&quot;icons&quot;:[{&quot;src&quot;:&quot;data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%237c3aed' width='192' height='192'/><text x='50%' y='50%' font-size='100' fill='white' text-anchor='middle' dominant-baseline='central'>📅</text></svg>&quot;,&quot;sizes&quot;:&quot;192x192&quot;,&quot;type&quot;:&quot;image/svg+xml&quot;,&quot;purpose&quot;:&quot;any&quot;}]}">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GrowUp – Smart Parenting App</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800;900&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --primary:#7c3aed;--primary-dark:#6d28d9;--primary-light:#ede9fe;
-  --white:#ffffff;--bg:#f0f4ff;--text:#1a1d2e;--text-soft:#64748b;
-  --border:#e2e8f0;--success:#22c55e;--shadow:0 4px 20px rgba(0,0,0,0.07);
-  --radius:22px;--radius-sm:14px;
+:root {
+  --bg: #f0f4ff;
+  --white: #ffffff;
+  --shadow: 0 4px 20px rgba(0,0,0,0.07);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 22px;
+  --radius-sm: 14px;
+  --radius-xs: 10px;
+  --text: #1a1d2e;
+  --text-soft: #64748b;
+  --border: #e8edf5;
+  --green: #16a34a;
+  --green-bg: #f0fdf4;
+  --green-border: #86efac;
+  --red: #ef4444;
+  --red-bg: #fef2f2;
+
+  /* Child palette — 6 colour slots */
+  --c0: #7c3aed; --c0l: #ede9fe;
+  --c1: #0284c7; --c1l: #e0f2fe;
+  --c2: #d97706; --c2l: #fef3c7;
+  --c3: #be185d; --c3l: #fce7f3;
+  --c4: #059669; --c4l: #d1fae5;
+  --c5: #dc2626; --c5l: #fee2e2;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;margin:0;padding:0;font-family:'Nunito',sans-serif}
-body{background:var(--bg);color:var(--text);-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  min-height:100vh;
+  background-image:
+    radial-gradient(ellipse at 10% 0%,rgba(167,139,250,.22) 0%,transparent 55%),
+    radial-gradient(ellipse at 90% 100%,rgba(125,211,252,.18) 0%,transparent 55%);
+}
 
-.app-container{height:100vh;display:flex;flex-direction:column;max-width:100vw;overflow:hidden}
-.app-content{flex:1;overflow-y:auto;padding:14px;overflow-x:hidden}
-.app-content::-webkit-scrollbar{width:6px}
-.app-content::-webkit-scrollbar-track{background:#f1f5f9}
-.app-content::-webkit-scrollbar-thumb{background:#c4b5fd;border-radius:3px}
+/* ── LAYOUT ── */
+.page{max-width:480px;margin:0 auto;padding:14px 14px 40px}
 
-.topbar{background:white;border-radius:0;padding:14px;margin:-14px -14px 14px -14px;box-shadow:0 2px 8px rgba(0,0,0,0.06);display:flex;align-items:center;justify-content:space-between;gap:8px}
-.brand{display:flex;align-items:center;gap:8px;font-weight:900;font-size:18px}
-.brand-logo{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
-.topbar-actions{display:flex;gap:6px}
-.icon-btn{width:36px;height:36px;border-radius:10px;background:var(--white);border:1px solid var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.icon-btn:active{transform:scale(0.95)}
+/* ── TOPBAR ── */
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.brand{display:flex;align-items:center;gap:8px}
+.brand-logo{
+  width:38px;height:38px;
+  background:linear-gradient(135deg,#7c3aed,#6d28d9);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;box-shadow:0 3px 10px rgba(109,40,217,.3);
+}
+.brand-name{font-family:'Baloo 2',sans-serif;font-size:20px;font-weight:900;color:var(--text)}
+.brand-tag{font-size:10px;color:var(--text-soft);font-weight:700;letter-spacing:.5px;margin-top:-4px}
+.topbar-actions{display:flex;gap:8px}
+.icon-btn{
+  width:38px;height:38px;border-radius:12px;
+  background:var(--white);border:none;cursor:pointer;
+  font-size:18px;display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--shadow);transition:all .2s;
+}
+.icon-btn:hover{transform:translateY(-1px);box-shadow:var(--shadow-md)}
+.icon-btn:active{transform:scale(.93)}
 
-.card{background:var(--white);border-radius:var(--radius-sm);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:none}
-.card-title{font-weight:900;font-size:15px;margin-bottom:12px}
-.stat-row{display:flex;justify-content:space-around;gap:8px}
-.stat-box{flex:1;text-align:center;padding:12px;background:var(--primary-light);border-radius:10px;border:2px solid var(--primary)}
-.stat-num{font-size:24px;font-weight:900;color:var(--primary)}
-.stat-label{font-size:10px;color:var(--text-soft);font-weight:700;margin-top:2px}
+/* ── PROFILES ROW ── */
+.profiles-scroll{overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+.profiles-scroll::-webkit-scrollbar{display:none}
+.profiles-row{display:flex;gap:10px;width:max-content;padding:2px 2px}
+.profile-chip{
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  cursor:pointer;transition:transform .2s;min-width:68px;
+}
+.profile-chip:hover{transform:translateY(-2px)}
+.profile-chip:active{transform:scale(.94)}
+.profile-avatar{
+  width:56px;height:56px;border-radius:18px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:28px;position:relative;
+  border:3px solid transparent;
+  transition:all .25s;
+  background:#e8edf5;
+}
+.profile-avatar.active{border-color:var(--pc,#7c3aed);box-shadow:0 4px 14px rgba(0,0,0,.15);}
+.profile-avatar .badge-done{
+  position:absolute;bottom:-4px;right:-4px;
+  background:#22c55e;color:white;
+  font-size:9px;font-weight:900;padding:2px 5px;border-radius:99px;
+  border:2px solid var(--bg);
+}
+.profile-name{font-size:12px;font-weight:800;color:var(--text);text-align:center;max-width:68px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.profile-add{
+  width:56px;height:56px;border-radius:18px;
+  border:2.5px dashed #c7d2e7;
+  background:rgba(255,255,255,.6);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;color:#94a3b8;cursor:pointer;
+  transition:all .2s;
+}
+.profile-add:hover{border-color:#7c3aed;color:#7c3aed;background:rgba(124,58,237,.06)}
 
-.profile-row{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
-.profile-row::-webkit-scrollbar{height:4px}
-.profile-chip{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;min-width:60px;padding:6px;border-radius:10px;transition:all .2s}
-.profile-chip:active{transform:scale(0.95)}
-.profile-avatar{width:48px;height:48px;border-radius:12px;background:var(--primary-light);border:3px solid transparent;display:flex;align-items:center;justify-content:center;font-size:24px;transition:all .2s}
-.profile-chip.active .profile-avatar{border-color:var(--primary);box-shadow:0 3px 10px rgba(124,58,237,0.3)}
-.profile-name{font-size:11px;font-weight:700;text-align:center;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* ── HEADER CARD ── */
+.header-card{
+  border-radius:26px;padding:20px;color:white;
+  margin-bottom:14px;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-md);
+}
+.hc-bg1{position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%}
+.hc-bg2{position:absolute;bottom:-60px;left:-20px;width:140px;height:140px;background:rgba(255,255,255,.06);border-radius:50%}
+.hc-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1}
+.hc-child{display:flex;align-items:center;gap:10px}
+.hc-avatar{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:24px}
+.hc-info h2{font-family:'Baloo 2',sans-serif;font-size:18px;font-weight:900;margin-bottom:1px}
+.hc-info p{font-size:12px;opacity:.8}
+.hc-edit{background:rgba(255,255,255,.2);border:none;color:white;border-radius:99px;padding:5px 12px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito';transition:background .2s}
+.hc-edit:hover{background:rgba(255,255,255,.35)}
 
-.act-card{background:var(--white);border-radius:var(--radius-sm);padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;cursor:pointer;border:2px solid var(--border);transition:all .15s}
-.act-card:active{transform:scale(0.98)}
-.act-card.done{background:linear-gradient(135deg,#f0fdf4,#f0fdf4);border-color:var(--success)}
-.act-emoji{font-size:24px}
-.act-info{flex:1}
-.act-name{font-weight:800;font-size:14px;color:var(--text)}
-.act-card.done .act-name{text-decoration:line-through;color:var(--success)}
-.act-time{font-size:11px;color:var(--text-soft);margin-top:2px}
-.check-btn{width:32px;height:32px;border-radius:50%;border:2.5px solid var(--border);background:var(--white);cursor:pointer;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all .2s;flex-shrink:0}
-.check-btn:active{transform:scale(0.9)}
-.check-btn.done{background:var(--success);border-color:var(--success);color:white}
+.date-nav{display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.dn-btn{background:rgba(255,255,255,.2);border:none;color:white;border-radius:50%;width:34px;height:34px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:background .2s;flex-shrink:0}
+.dn-btn:hover{background:rgba(255,255,255,.35)}
+.dn-btn:active{transform:scale(.9)}
+.dn-btn:disabled{opacity:.3;cursor:default}
+.dn-date{flex:1;text-align:center}
+.dn-day{font-family:'Baloo 2',sans-serif;font-size:17px;font-weight:800}
+.dn-full{font-size:12px;opacity:.8}
+.today-pill{background:rgba(255,255,255,.22);border-radius:99px;padding:3px 10px;font-size:10px;font-weight:900;letter-spacing:.8px}
 
-.bottom-actions{display:flex;gap:8px;flex-wrap:wrap}
-.btn{flex:1;min-height:44px;padding:12px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito';transition:all .2s}
-.btn:active{transform:scale(0.96)}
-.btn-primary{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white}
-.btn-secondary{background:var(--white);color:var(--text-soft);border:2px solid var(--border)}
+.progress-block{background:rgba(255,255,255,.15);border-radius:16px;padding:13px 15px;margin-top:14px;position:relative;z-index:1}
+.pb-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}
+.pb-label{font-size:13px;font-weight:700}
+.pb-pct{font-family:'Baloo 2',sans-serif;font-size:24px;font-weight:900}
+.pb-track{background:rgba(255,255,255,.25);border-radius:99px;height:11px;overflow:hidden;margin-bottom:9px}
+.pb-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,#fde68a,#fbbf24,#f59e0b);transition:width .6s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden}
+.pb-fill::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);animation:sh 2.2s infinite}
+@keyframes sh{from{transform:translateX(-100%)}to{transform:translateX(200%)}}
+.stars-row{display:flex;justify-content:center;gap:3px;font-size:20px}
+.star{transition:transform .3s}
+.star.lit{animation:starPop .4s ease both}
+@keyframes starPop{0%{transform:scale(0)}70%{transform:scale(1.35)}100%{transform:scale(1)}}
 
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.5);display:none;align-items:flex-end;justify-content:center;z-index:1000;animation:fadeIn 0.2s}
-.modal-backdrop.active{display:flex}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal-content{background:var(--white);border-radius:var(--radius) var(--radius) 0 0;padding:20px;width:100%;max-width:100vw;animation:slideUp 0.3s}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-title{font-size:18px;font-weight:900;margin-bottom:16px;color:var(--text)}
-.form-group{margin-bottom:12px}
-.form-group label{display:block;font-size:11px;font-weight:900;color:var(--text-soft);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:11px;border:2px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-family:'Nunito';outline:none}
-.form-group input:focus,.form-group textarea:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(124,58,237,0.1)}
-.modal-footer{display:flex;gap:8px;margin-top:16px}
-.modal-footer button{flex:1;padding:12px;border:none;border-radius:var(--radius-sm);font-weight:800;cursor:pointer;font-family:'Nunito'}
-.btn-save{background:var(--primary);color:white}
-.btn-cancel{background:#f1f5f9;color:var(--text-soft)}
+/* ── CELEBRATION ── */
+.celebration{
+  background:linear-gradient(135deg,#fbbf24,#f97316,#ef4444);
+  border-radius:var(--radius);padding:15px;text-align:center;
+  color:white;font-size:15px;font-weight:900;margin-bottom:12px;
+  animation:celeb 2s ease-in-out infinite;box-shadow:0 6px 24px rgba(249,115,22,.4);
+}
+@keyframes celeb{0%,100%{transform:scale(1)}50%{transform:scale(1.02)}}
 
-.toast{position:fixed;bottom:20px;left:20px;right:20px;background:var(--success);color:white;padding:12px;border-radius:var(--radius-sm);font-weight:700;z-index:2000;animation:slideUp 0.3s}
+/* ── SECTION ── */
+.section-hdr{display:flex;align-items:center;gap:8px;margin:18px 0 8px;padding:0 2px}
+.section-icon{font-size:18px}
+.section-title{font-size:12px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}
+.section-line{flex:1;height:1.5px;border-radius:99px;opacity:.25}
+.morning .section-title,.morning .section-line{color:#c2410c;background:#c2410c}
+.afternoon .section-title,.afternoon .section-line{color:#a16207;background:#a16207}
+.evening .section-title,.evening .section-line{color:#0369a1;background:#0369a1}
+.night .section-title,.night .section-line{color:#6d28d9;background:#6d28d9}
 
-.install-prompt{background:linear-gradient(135deg,var(--primary),var(--primary-dark));color:white;border-radius:var(--radius-sm);padding:12px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
-.install-text{font-size:12px;font-weight:700}
-.install-btn{background:white;color:var(--primary);border:none;padding:6px 14px;border-radius:6px;font-weight:800;cursor:pointer;font-size:11px}
+/* ── CARDS ── */
+.act-card{
+  background:var(--white);border-radius:var(--radius);padding:13px 14px;
+  margin-bottom:8px;display:flex;align-items:center;gap:11px;
+  cursor:pointer;transition:transform .15s,box-shadow .15s,background .3s;
+  border:2px solid transparent;position:relative;box-shadow:var(--shadow);
+  animation:cardIn .3s ease both;
+}
+@keyframes cardIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.act-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.act-card:active{transform:scale(.98)}
+.act-card.done{background:var(--green-bg);border-color:var(--green-border)}
+.act-card.done .act-name{text-decoration:line-through;color:#86efac}
+.act-card.done .act-desc{color:#bbf7d0}
+.act-card.active-now{border-color:#fb923c;box-shadow:0 0 0 3px rgba(251,146,60,.18),var(--shadow)}
+.now-pill{position:absolute;top:-9px;right:14px;background:linear-gradient(90deg,#fb923c,#f97316);color:white;font-size:9px;font-weight:900;padding:2px 9px;border-radius:99px;letter-spacing:.5px;box-shadow:0 2px 8px rgba(249,115,22,.4)}
+.time-badge{font-size:11px;font-weight:800;padding:4px 8px;border-radius:99px;min-width:50px;text-align:center;flex-shrink:0;font-family:'Baloo 2',sans-serif}
+.tb-morning{background:#fff7ed;color:#c2410c}
+.tb-afternoon{background:#fefce8;color:#a16207}
+.tb-evening{background:#e0f2fe;color:#0369a1}
+.tb-night{background:#f5f3ff;color:#6d28d9}
+.act-emoji{font-size:28px;width:36px;text-align:center;flex-shrink:0}
+.act-info{flex:1;min-width:0}
+.act-name{font-size:14px;font-weight:800;color:var(--text);transition:color .3s;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act-desc{font-size:12px;color:var(--text-soft);margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act-actions{display:flex;align-items:center;gap:6px}
+.del-btn{width:26px;height:26px;border-radius:50%;border:none;background:var(--red-bg);color:var(--red);font-size:13px;cursor:pointer;display:none;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.act-card:hover .del-btn{display:flex}
+.del-btn:hover{background:var(--red);color:white;transform:scale(1.1)}
+.check-btn{width:32px;height:32px;border-radius:50%;border:2.5px solid var(--border);background:var(--white);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .25s cubic-bezier(.34,1.56,.64,1);flex-shrink:0;color:white;font-weight:900}
+.check-btn.done{background:#22c55e;border-color:#22c55e;box-shadow:0 2px 10px rgba(34,197,94,.4);transform:scale(1.05)}
+.check-btn:hover{transform:scale(1.12)}
 
+/* ── BOTTOM BAR ── */
+.bottom-bar{display:flex;gap:10px;margin-top:18px}
+.ac-btn{flex:1;padding:13px;border:none;border-radius:var(--radius-sm);font-size:13px;font-weight:800;cursor:pointer;font-family:'Nunito';transition:all .2s}
+.ac-btn:active{transform:scale(.96)}
+.btn-add-act{color:white;box-shadow:0 4px 16px rgba(109,40,217,.3)}
+.btn-reset{background:var(--white);color:var(--red);border:2px solid #fecaca;box-shadow:var(--shadow)}
+.btn-reset:hover{background:var(--red-bg)}
+
+/* ── MODALS ── */
+.overlay{position:fixed;inset:0;background:rgba(10,8,30,.55);display:flex;align-items:flex-end;justify-content:center;z-index:500;animation:ovIn .2s ease}
+.overlay.center{align-items:center;padding:20px}
+@keyframes ovIn{from{opacity:0}to{opacity:1}}
+.sheet{background:var(--white);border-radius:28px 28px 0 0;padding:22px 20px 40px;width:100%;max-width:480px;animation:sheetUp .3s cubic-bezier(.34,1.56,.64,1)}
+.sheet.center-modal{border-radius:var(--radius);padding:24px 22px;animation:popIn .3s cubic-bezier(.34,1.56,.64,1)}
+@keyframes sheetUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+@keyframes popIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.sheet-handle{width:40px;height:4px;background:var(--border);border-radius:99px;margin:0 auto 18px}
+.sheet h3{font-family:'Baloo 2',sans-serif;font-size:19px;font-weight:900;color:var(--text);margin-bottom:18px}
+.form-row{display:flex;gap:10px}
+.form-g{margin-bottom:13px;flex:1}
+.form-g label{font-size:11px;font-weight:900;color:var(--text-soft);display:block;margin-bottom:5px;letter-spacing:.6px;text-transform:uppercase}
+.form-g input,.form-g select,.form-g textarea{width:100%;padding:11px 13px;border:2px solid var(--border);border-radius:var(--radius-xs);font-size:14px;font-family:'Nunito';outline:none;transition:border-color .2s,box-shadow .2s;color:var(--text);background:var(--white)}
+.form-g input:focus,.form-g select:focus,.form-g textarea:focus{border-color:#7c3aed;box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.emoji-grid{display:grid;grid-template-columns:repeat(8,1fr);gap:5px;margin-bottom:13px}
+.eg-opt{width:36px;height:36px;border-radius:9px;border:2px solid var(--border);background:#f8fafc;font-size:19px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.eg-opt:hover{background:#f0e7ff;border-color:#c4b5fd;transform:scale(1.1)}
+.eg-opt.sel{background:#ede9fe;border-color:#7c3aed;transform:scale(1.12)}
+.color-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.color-dot{width:32px;height:32px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative}
+.color-dot.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:900}
+.color-dot:hover{transform:scale(1.15)}
+.modal-btns{display:flex;gap:10px;margin-top:18px}
+.modal-btns button{flex:1;padding:13px;border-radius:var(--radius-xs);border:none;font-size:14px;font-weight:800;cursor:pointer;font-family:'Nunito';transition:all .2s}
+.modal-btns button:active{transform:scale(.96)}
+.mbtn-save{color:white;box-shadow:0 4px 14px rgba(109,40,217,.3)}
+.mbtn-cancel{background:#f1f5f9;color:var(--text-soft)}
+.mbtn-danger{background:var(--red-bg);color:var(--red)}
+
+/* ── ONBOARDING ── */
+.onboard{position:fixed;inset:0;background:white;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center;animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.ob-logo{width:80px;height:80px;background:linear-gradient(135deg,#7c3aed,#6d28d9);border-radius:28px;display:flex;align-items:center;justify-content:center;font-size:42px;margin:0 auto 20px;box-shadow:0 8px 32px rgba(109,40,217,.4)}
+.ob-logo-pulse{animation:logoPulse 2s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{box-shadow:0 8px 32px rgba(109,40,217,.4)}50%{box-shadow:0 12px 48px rgba(109,40,217,.6)}}
+.ob h1{font-family:'Baloo 2',sans-serif;font-size:32px;font-weight:900;color:var(--text);margin-bottom:6px}
+.ob p{font-size:15px;color:var(--text-soft);font-weight:600;margin-bottom:36px;line-height:1.6}
+.ob-input{width:100%;padding:15px;border:2.5px solid var(--border);border-radius:var(--radius-sm);font-size:18px;font-weight:800;font-family:'Nunito';text-align:center;outline:none;color:var(--text);margin-bottom:14px;transition:border-color .2s}
+.ob-input:focus{border-color:#7c3aed;box-shadow:0 0 0 4px rgba(124,58,237,.1)}
+.ob-emoji-row{display:flex;gap:10px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+.ob-emoji{width:52px;height:52px;border-radius:16px;border:2.5px solid var(--border);background:#f8fafc;font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.ob-emoji:hover{border-color:#7c3aed;background:#ede9fe;transform:scale(1.1)}
+.ob-emoji.sel{border-color:#7c3aed;background:#ede9fe;transform:scale(1.12)}
+.ob-start{width:100%;padding:16px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;border-radius:var(--radius-sm);font-size:17px;font-weight:900;cursor:pointer;font-family:'Nunito';box-shadow:0 6px 24px rgba(109,40,217,.4);transition:all .2s}
+.ob-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(109,40,217,.5)}
+.ob-start:active{transform:scale(.97)}
+.ob-skip{margin-top:14px;font-size:13px;color:var(--text-soft);cursor:pointer;font-weight:700}
+.ob-skip:hover{color:var(--text)}
+.ob-features{display:flex;flex-direction:column;gap:10px;margin-bottom:32px;text-align:left;width:100%}
+.ob-feat{display:flex;align-items:center;gap:12px;background:#f8fafc;border-radius:14px;padding:12px 14px}
+.ob-feat-icon{font-size:22px;flex-shrink:0}
+.ob-feat-text strong{font-size:14px;font-weight:800;color:var(--text);display:block}
+.ob-feat-text span{font-size:12px;color:var(--text-soft)}
+.ob-step{display:none}
+.ob-step.active{display:block}
+.ob-dots{display:flex;gap:6px;justify-content:center;margin-bottom:28px}
+.ob-dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .3s}
+.ob-dot.active{background:#7c3aed;width:24px;border-radius:99px}
+
+/* ── SETTINGS SHEET ── */
+.settings-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
+.settings-item:last-child{border:none}
+.si-left{display:flex;align-items:center;gap:12px}
+.si-icon{width:38px;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.si-text strong{font-size:14px;font-weight:800;color:var(--text);display:block}
+.si-text span{font-size:12px;color:var(--text-soft)}
+.si-arrow{font-size:16px;color:var(--text-soft)}
+
+/* ── MANAGE CHILDREN ── */
+.child-manage-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.child-manage-item:last-child{border:none}
+.cmi-avatar{width:44px;height:44px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.cmi-info{flex:1}
+.cmi-name{font-size:15px;font-weight:800;color:var(--text)}
+.cmi-acts{font-size:12px;color:var(--text-soft)}
+.cmi-btns{display:flex;gap:6px}
+.cmi-btn{width:32px;height:32px;border-radius:10px;border:none;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.cmi-edit{background:#ede9fe;color:#7c3aed}
+.cmi-del{background:var(--red-bg);color:var(--red)}
+.cmi-btn:hover{transform:scale(1.1)}
+
+/* ── EMPTY ── */
 .empty-state{text-align:center;padding:40px 20px;color:var(--text-soft)}
-.empty-icon{font-size:48px;margin-bottom:12px}
-.empty-text{font-weight:700}
+.empty-state .big{font-size:56px;margin-bottom:12px}
+.empty-state p{font-size:15px;font-weight:700}
+
+/* ── FOOTER ── */
+.app-footer{text-align:center;margin-top:28px;font-size:12px;color:var(--text-soft);font-weight:600;line-height:1.8}
+.app-footer strong{color:var(--text)}
+
+@media(max-width:380px){
+  .act-emoji{font-size:22px;width:28px}
+  .time-badge{font-size:10px;min-width:44px;padding:3px 6px}
+  .profile-avatar{width:50px;height:50px;border-radius:15px}
+}
 </style>
 </head>
 <body>
 
-<div class="app-container">
-  <div class="app-content" id="app">Loading...</div>
-</div>
-
-<div class="modal-backdrop" id="modal">
-  <div class="modal-content" id="modal-content"></div>
-</div>
+<div class="page" id="root"></div>
 
 <script>
-const DB_KEY='GrowUp-app-data-v2';
-const DEFAULT_ACTS=[
-  {emoji:'🌅',name:'Bangun Tidur',time:'05:00',session:'morning',desc:'Bangun & rapikan tempat tidur'},
-  {emoji:'🕌',name:'Sholat Subuh',time:'05:15',session:'morning',desc:'Sholat subuh berjamaah'},
-  {emoji:'🚿',name:'Mandi Pagi',time:'05:30',session:'morning',desc:'Mandi dan sikat gigi'},
-  {emoji:'🍳',name:'Sarapan',time:'06:00',session:'morning',desc:'Makan pagi yang bergizi'},
-  {emoji:'👔',name:'Siap ke Sekolah',time:'06:30',session:'morning',desc:'Pakai seragam & rapikan tas'},
-  {emoji:'🏫',name:'Berangkat Sekolah',time:'07:00',session:'morning',desc:'Pamit orang tua sebelum pergi'},
-  {emoji:'📚',name:'Belajar di Sekolah',time:'07:30',session:'afternoon',desc:'Fokus dan aktif di kelas'},
-  {emoji:'🕐',name:'Sholat Dzuhur',time:'12:00',session:'afternoon',desc:'Sholat dzuhur tepat waktu'},
-  {emoji:'🏠',name:'Pulang Sekolah',time:'13:00',session:'afternoon',desc:'Ganti baju & cuci tangan'},
-  {emoji:'🍽️',name:'Makan Siang',time:'13:30',session:'afternoon',desc:'Makan siang bersama keluarga'},
-  {emoji:'😴',name:'Istirahat / Tidur Siang',time:'14:00',session:'afternoon',desc:'Istirahat 1 jam supaya segar'},
-  {emoji:'🕒',name:'Sholat Ashar',time:'15:30',session:'afternoon',desc:'Sholat ashar tepat waktu'},
-  {emoji:'✏️',name:'Belajar / PR',time:'16:00',session:'evening',desc:'Kerjakan PR dan ulang pelajaran'},
-  {emoji:'⚽',name:'Bermain / Olahraga',time:'17:00',session:'evening',desc:'Gerak badan minimal 30 menit'},
-  {emoji:'🌙',name:'Sholat Maghrib',time:'18:00',session:'evening',desc:'Sholat maghrib berjamaah'},
-  {emoji:'🌃',name:'Sholat Isya',time:'19:00',session:'night',desc:'Sholat isya tepat waktu'},
-  {emoji:'🍜',name:'Makan Malam',time:'19:15',session:'night',desc:'Makan malam bersama keluarga'},
-  {emoji:'📖',name:'Belajar Malam',time:'19:45',session:'night',desc:'Ulang pelajaran & siap besok'},
-  {emoji:'🦷',name:'Sikat Gigi & Cuci Muka',time:'20:30',session:'night',desc:'Bersih-bersih sebelum tidur'},
-  {emoji:'🙏',name:'Doa & Tidur',time:'21:00',session:'night',desc:'Berdoa dan tidur yang cukup'},
+// ══════════════════════════════════════════
+// CONSTANTS
+// ══════════════════════════════════════════
+const SK = 'GrowUp-v2';
+
+const CHILD_COLORS = [
+  '#7c3aed','#0284c7','#d97706','#be185d','#059669','#dc2626'
+];
+const CHILD_COLORS_LIGHT = [
+  '#ede9fe','#e0f2fe','#fef3c7','#fce7f3','#d1fae5','#fee2e2'
 ];
 
-let DB={children:[],activeId:null,activities:{},perDayDone:{},perDayNotes:{}};
+const AVATAR_OPTS = ['👧','👦','🧒','👶','🦸','🧑'];
 
-function dkey(d){return d.toISOString().slice(0,10)}
-function uid(){return '_'+Math.random().toString(36).slice(2,9)}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
+const EMOJI_OPTS = [
+  '🌅','🕌','🚿','🍳','👔','🏫','📚','✏️',
+  '⚽','🏊','🍽️','😴','🕐','🌙','🌃','🍜',
+  '📖','🦷','🙏','🎨','🎮','🎯','🏃','🧘',
+  '🎸','🍎','🎶','🚴','🏋️','🌸','💻','🎤',
+];
 
-function save(){try{localStorage.setItem(DB_KEY,JSON.stringify(DB))}catch(e){alert('Gagal menyimpan data')}}
-function load(){try{const raw=localStorage.getItem(DB_KEY);if(raw)DB=JSON.parse(raw);if(!DB.children.length)return;syncDone(new Date())}catch(e){console.log('Load error:',e)}}
+const DEFAULT_ACTS = [
+  {emoji:'🌅',name:'Bangun Tidur',          time:'05:00',session:'morning',  desc:'Bangun & rapikan tempat tidur'},
+  {emoji:'🕌',name:'Sholat Subuh',           time:'05:15',session:'morning',  desc:'Sholat subuh berjamaah'},
+  {emoji:'🚿',name:'Mandi Pagi',             time:'05:30',session:'morning',  desc:'Mandi dan sikat gigi'},
+  {emoji:'🍳',name:'Sarapan',                time:'06:00',session:'morning',  desc:'Makan pagi yang bergizi'},
+  {emoji:'👔',name:'Siap ke Sekolah',        time:'06:30',session:'morning',  desc:'Pakai seragam & rapikan tas'},
+  {emoji:'🏫',name:'Berangkat Sekolah',      time:'07:00',session:'morning',  desc:'Pamit orang tua sebelum pergi'},
+  {emoji:'📚',name:'Belajar di Sekolah',     time:'07:30',session:'afternoon',desc:'Fokus dan aktif di kelas'},
+  {emoji:'🕐',name:'Sholat Dzuhur',          time:'12:00',session:'afternoon',desc:'Sholat dzuhur tepat waktu'},
+  {emoji:'🏠',name:'Pulang Sekolah',         time:'13:00',session:'afternoon',desc:'Ganti baju & cuci tangan'},
+  {emoji:'🍽️',name:'Makan Siang',           time:'13:30',session:'afternoon',desc:'Makan siang bersama keluarga'},
+  {emoji:'😴',name:'Istirahat / Tidur Siang',time:'14:00',session:'afternoon',desc:'Istirahat 1 jam supaya segar'},
+  {emoji:'🕒',name:'Sholat Ashar',           time:'15:30',session:'afternoon',desc:'Sholat ashar tepat waktu'},
+  {emoji:'✏️',name:'Belajar / PR',           time:'16:00',session:'evening',  desc:'Kerjakan PR dan ulang pelajaran'},
+  {emoji:'⚽',name:'Bermain / Olahraga',     time:'17:00',session:'evening',  desc:'Gerak badan minimal 30 menit'},
+  {emoji:'🌙',name:'Sholat Maghrib',         time:'18:00',session:'evening',  desc:'Sholat maghrib berjamaah'},
+  {emoji:'🌃',name:'Sholat Isya',            time:'19:00',session:'night',    desc:'Sholat isya tepat waktu'},
+  {emoji:'🍜',name:'Makan Malam',            time:'19:15',session:'night',    desc:'Makan malam bersama keluarga'},
+  {emoji:'📖',name:'Belajar Malam',          time:'19:45',session:'night',    desc:'Ulang pelajaran & siap besok'},
+  {emoji:'🦷',name:'Sikat Gigi & Cuci Muka', time:'20:30',session:'night',    desc:'Bersih-bersih sebelum tidur'},
+  {emoji:'🙏',name:'Doa & Tidur',            time:'21:00',session:'night',    desc:'Berdoa dan tidur yang cukup'},
+];
 
-function syncDone(d){const cid=DB.activeId;if(!cid)return;const ids=(DB.perDayDone[cid]||{})[dkey(d)]||[];if(DB.activities[cid]){DB.activities[cid]=DB.activities[cid].map(a=>({...a,done:ids.includes(a.id)}))}}
+const SESSIONS = {
+  morning:  {label:'Pagi Hari',  icon:'☀️', cls:'morning'},
+  afternoon:{label:'Siang Hari', icon:'🌤️',cls:'afternoon'},
+  evening:  {label:'Sore Hari',  icon:'🌇', cls:'evening'},
+  night:    {label:'Malam Hari', icon:'🌙', cls:'night'},
+};
 
-function getDone(d){const ids=(DB.perDayDone[DB.activeId]||{})[dkey(d)]||[];return ids.length}
-function getTotalActs(){return(DB.activities[DB.activeId]||[]).length}
-function getPct(d){const t=getTotalActs();return t?Math.round(getDone(d)/t*100):0}
+const DAYS_ID   = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const MONTHS_ID = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 
-function switchChild(id){DB.activeId=id;syncDone(new Date());render()}
-function toggleDone(id){const acts=DB.activities[DB.activeId]||[];DB.activities[DB.activeId]=acts.map(a=>a.id===id?{...a,done:!a.done}:a);const key=dkey(new Date());if(!DB.perDayDone[DB.activeId])DB.perDayDone[DB.activeId]={};DB.perDayDone[DB.activeId][key]=acts.filter(a=>a.done).map(a=>a.id);save();render()}
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+let S = {
+  onboard: true,
+  obStep: 0,
+  obName: '',
+  obAvatar: '👧',
+  children: [],          // [{id,name,avatar,colorIdx}]
+  activeId: null,
+  activities: {},        // {childId:[...]}
+  perDayDone: {},        // {childId:{dateKey:[ids]}}
+  viewDate: new Date(),
+  modal: null,           // 'addAct'|'addChild'|'editChild'|'settings'|'manageChildren'
+  editChildId: null,
+  selectedEmoji: '⭐',
+  selColor: 0,
+  selAvatar: '👧',
+};
 
-function addChild(){closeModal();const name=prompt('Nama anak:');if(!name)return;const id=uid();DB.children.push({id,name,avatar:'👧'});DB.activities[id]=DEFAULT_ACTS.map((a,i)=>({...a,id:i+1,done:false}));DB.activeId=id;save();render()}
-
-function openModal(modal){
-  const backdrop=document.getElementById('modal');
-  const content=document.getElementById('modal-content');
-  
-  if(modal==='addActivity'){
-    content.innerHTML=`
-      <div class="modal-title">➕ Tambah Kegiatan</div>
-      <div class="form-group">
-        <label>Nama Kegiatan</label>
-        <input id="act-name" placeholder="Contoh: Les Piano..." maxlength="30">
-      </div>
-      <div class="form-group">
-        <label>Waktu (HH:MM)</label>
-        <input id="act-time" type="time" value="08:00">
-      </div>
-      <div class="form-group">
-        <label>Emoji</label>
-        <input id="act-emoji" placeholder="Pilih emoji..." value="⭐" maxlength="2">
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-cancel" onclick="closeModal()">Batal</button>
-        <button class="btn btn-save" onclick="saveActivity()">Simpan</button>
-      </div>
-    `;
+// ══════════════════════════════════════════
+// PERSIST
+// ══════════════════════════════════════════
+function persist() {
+  if (S.activeId) {
+    const key = dkey(new Date());
+    if (!S.perDayDone[S.activeId]) S.perDayDone[S.activeId]={};
+    S.perDayDone[S.activeId][key] = (S.activities[S.activeId]||[]).filter(a=>a.done).map(a=>a.id);
   }
-  else if(modal==='settings'){
-    content.innerHTML=`
-      <div class="modal-title">⚙️ Pengaturan</div>
-      <button class="btn btn-secondary" onclick="exportData()" style="margin-bottom:8px">📥 Export Data (JSON)</button>
-      <button class="btn btn-secondary" onclick="importData()" style="margin-bottom:8px">📤 Import Data (JSON)</button>
-      <button class="btn btn-secondary" onclick="closeModal()">Tutup</button>
-    `;
-  }
-  
-  backdrop.classList.add('active');
-  setTimeout(()=>document.getElementById('act-name')?.focus(),100);
+  const save = {
+    children:   S.children,
+    activeId:   S.activeId,
+    activities: {},
+    perDayDone: S.perDayDone,
+  };
+  // strip done flags for storage
+  Object.keys(S.activities).forEach(cid=>{
+    save.activities[cid] = (S.activities[cid]||[]).map(a=>({...a,done:false}));
+  });
+  try{ localStorage.setItem(SK,JSON.stringify(save)); }catch(e){}
 }
 
-function closeModal(){document.getElementById('modal').classList.remove('active')}
+function hydrate() {
+  try{
+    const raw = localStorage.getItem(SK);
+    if(!raw) return;
+    const d = JSON.parse(raw);
+    S.children   = d.children   || [];
+    S.activeId   = d.activeId   || null;
+    S.activities = d.activities  || {};
+    S.perDayDone = d.perDayDone  || {};
+    if(S.children.length){S.onboard=false; syncDone(S.viewDate);}
+  }catch(e){}
+}
+
+function syncDone(d) {
+  const cid = S.activeId;
+  if(!cid) return;
+  const ids = (S.perDayDone[cid]||{})[dkey(d)]||[];
+  if(S.activities[cid]){
+    S.activities[cid]=S.activities[cid].map(a=>({...a,done:ids.includes(a.id)}));
+  }
+}
+
+// ══════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════
+function dkey(d){return d.toISOString().slice(0,10)}
+function isToday(d){return d.toDateString()===new Date().toDateString()}
+function toMin(t){const[h,m]=t.split(':').map(Number);return h*60+m}
+function nowMin(){const n=new Date();return n.getHours()*60+n.getMinutes()}
+function nextId(arr){return arr.length?Math.max(...arr.map(a=>a.id))+1:1}
+function uid(){return '_'+Math.random().toString(36).slice(2,9)}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+
+function childColor(c){return CHILD_COLORS[c?.colorIdx||0]}
+function childColorLight(c){return CHILD_COLORS_LIGHT[c?.colorIdx||0]}
+
+function getChild(id){return S.children.find(c=>c.id===id)}
+function activeChild(){return getChild(S.activeId)}
+
+function getActs(){return S.activities[S.activeId]||[]}
+
+function getDone(d){
+  const cid=S.activeId;
+  if(!cid) return 0;
+  if(isToday(d)) return getActs().filter(a=>a.done).length;
+  return ((S.perDayDone[cid]||{})[dkey(d)]||[]).length;
+}
+function getPct(d){const t=getActs().length;return t?Math.round(getDone(d)/t*100):0}
+function getStarCount(p){
+  if(p>=100)return 5;if(p>=80)return 4;if(p>=60)return 3;if(p>=40)return 2;if(p>=20)return 1;return 0;
+}
+function childPct(cid,d){
+  const acts=S.activities[cid]||[];
+  if(!acts.length) return 0;
+  const done=isToday(d)?acts.filter(a=>a.done).length:((S.perDayDone[cid]||{})[dkey(d)]||[]).length;
+  return Math.round(done/acts.length*100);
+}
+
+function currentActId(){
+  if(!isToday(S.viewDate)||!S.activeId) return null;
+  const now=nowMin();
+  const sorted=[...getActs()].sort((a,b)=>toMin(a.time)-toMin(b.time));
+  for(let i=0;i<sorted.length;i++){
+    const s=toMin(sorted[i].time);
+    const e=sorted[i+1]?toMin(sorted[i+1].time):s+60;
+    if(now>=s&&now<e) return sorted[i].id;
+  }
+  return null;
+}
+
+function fmtDate(d){return`${d.getDate()} ${MONTHS_ID[d.getMonth()]} ${d.getFullYear()}`}
+
+// ══════════════════════════════════════════
+// ACTIONS
+// ══════════════════════════════════════════
+function switchChild(id){
+  S.activeId=id;
+  S.viewDate=new Date();
+  syncDone(S.viewDate);
+  render();
+}
+
+function toggleDone(id){
+  const acts=S.activities[S.activeId];
+  if(!acts) return;
+  S.activities[S.activeId]=acts.map(a=>a.id===id?{...a,done:!a.done}:a);
+  persist(); render();
+}
+
+function deleteAct(id){
+  if(!confirm('Hapus kegiatan ini?')) return;
+  S.activities[S.activeId]=(S.activities[S.activeId]||[]).filter(a=>a.id!==id);
+  persist(); render();
+}
+
+function changeDate(delta){
+  const d=new Date(S.viewDate);
+  d.setDate(d.getDate()+delta);
+  S.viewDate=d;
+  syncDone(d);
+  render();
+}
+
+function resetDay(){
+  if(!confirm('Reset semua centang hari ini?')) return;
+  S.activities[S.activeId]=(S.activities[S.activeId]||[]).map(a=>({...a,done:false}));
+  const cid=S.activeId;
+  if(!S.perDayDone[cid]) S.perDayDone[cid]={};
+  S.perDayDone[cid][dkey(new Date())]=[];
+  persist(); render();
+}
+
+function openModal(m){S.modal=m;render()}
+function closeModal(){S.modal=null;S.editChildId=null;render()}
+
+function selectEmoji(e){
+  S.selectedEmoji=e;
+  document.querySelectorAll('.eg-opt').forEach(el=>el.classList.toggle('sel',el.dataset.e===e));
+  const inp=document.getElementById('m-emoji');
+  if(inp) inp.value=e;
+}
 
 function saveActivity(){
-  const name=document.getElementById('act-name')?.value.trim();
-  const time=document.getElementById('act-time')?.value;
-  const emoji=document.getElementById('act-emoji')?.value||'⭐';
+  const name=(document.getElementById('m-name')?.value||'').trim();
   if(!name){alert('Nama kegiatan harus diisi!');return}
-  const acts=DB.activities[DB.activeId]||[];
-  acts.push({id:Math.max(...acts.map(a=>a.id),0)+1,emoji,name,time,session:'morning',desc:'',done:false});
-  acts.sort((a,b)=>toMin(a.time)-toMin(b.time));
-  save();
-  closeModal();
-  render();
-  showToast('✅ Kegiatan ditambahkan');
-}
-
-function exportData(){
-  const data=JSON.stringify(DB,null,2);
-  const blob=new Blob([data],{type:'application/json'});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement('a');
-  a.href=url;
-  a.download=`GrowUp-backup-${dkey(new Date())}.json`;
-  a.click();
-  closeModal();
-  showToast('✅ Data diexport');
-}
-
-function importData(){
-  const input=document.createElement('input');
-  input.type='file';
-  input.accept='.json';
-  input.onchange=e=>{
-    const file=e.target.files[0];
-    const reader=new FileReader();
-    reader.onload=evt=>{
-      try{
-        const imported=JSON.parse(evt.target.result);
-        DB=imported;
-        save();
-        closeModal();
-        render();
-        showToast('✅ Data diimport');
-      }catch(err){
-        alert('File tidak valid!');
-      }
-    };
-    reader.readAsText(file);
+  const act={
+    id:nextId(getActs()),
+    emoji:document.getElementById('m-emoji')?.value||S.selectedEmoji||'⭐',
+    name,
+    time:document.getElementById('m-time')?.value||'08:00',
+    session:document.getElementById('m-session')?.value||'morning',
+    desc:(document.getElementById('m-desc')?.value||'').trim(),
+    done:false,
   };
-  input.click();
+  if(!S.activities[S.activeId]) S.activities[S.activeId]=[];
+  S.activities[S.activeId].push(act);
+  S.activities[S.activeId].sort((a,b)=>toMin(a.time)-toMin(b.time));
+  persist(); S.modal=null; render();
 }
 
-function showToast(msg){
-  const toast=document.createElement('div');
-  toast.className='toast';
-  toast.textContent=msg;
-  document.body.appendChild(toast);
-  setTimeout(()=>toast.remove(),2000);
+function openEditChild(id){
+  S.editChildId=id;
+  const c=getChild(id);
+  S.selAvatar=c.avatar;
+  S.selColor=c.colorIdx||0;
+  S.modal='editChild';
+  render();
 }
 
+function saveEditChild(){
+  const name=(document.getElementById('ec-name')?.value||'').trim();
+  if(!name){alert('Nama anak harus diisi!');return}
+  S.children=S.children.map(c=>c.id===S.editChildId?{...c,name,avatar:S.selAvatar,colorIdx:S.selColor}:c);
+  persist(); S.modal=null; S.editChildId=null; render();
+}
+
+function deleteChild(id){
+  if(S.children.length<=1){alert('Minimal harus ada 1 anak.');return}
+  if(!confirm('Hapus profil anak ini beserta semua jadwalnya?')) return;
+  S.children=S.children.filter(c=>c.id!==id);
+  delete S.activities[id];
+  delete S.perDayDone[id];
+  if(S.activeId===id) S.activeId=S.children[0]?.id||null;
+  persist(); S.modal=null; render();
+}
+
+function addChild(){
+  const name=(document.getElementById('ac-name')?.value||'').trim();
+  if(!name){alert('Nama anak harus diisi!');return}
+  const id=uid();
+  const ci=S.selColor;
+  S.children.push({id,name,avatar:S.selAvatar,colorIdx:ci});
+  S.activities[id]=DEFAULT_ACTS.map((a,i)=>({...a,id:i+1,done:false}));
+  S.activeId=id;
+  S.viewDate=new Date();
+  syncDone(S.viewDate);
+  persist(); S.modal=null; render();
+}
+
+function selectColor(i){
+  S.selColor=i;
+  document.querySelectorAll('.color-dot').forEach((el,j)=>el.classList.toggle('sel',j===i));
+}
+
+function selectAvatar(a){
+  S.selAvatar=a;
+  document.querySelectorAll('.ob-emoji,.av-opt').forEach(el=>el.classList.toggle('sel',el.dataset.a===a));
+}
+
+// ── ONBOARD ──
+function obNext(){
+  const name=(document.getElementById('ob-name')?.value||'').trim();
+  if(!name){alert('Masukkan nama anak terlebih dahulu!');return}
+  S.obName=name;
+  S.obStep=1;
+  render();
+}
+
+function finishOnboard(){
+  const id=uid();
+  const c={id,name:S.obName,avatar:S.obAvatar,colorIdx:0};
+  S.children=[c];
+  S.activities[id]=DEFAULT_ACTS.map((a,i)=>({...a,id:i+1,done:false}));
+  S.activeId=id;
+  S.onboard=false;
+  S.viewDate=new Date();
+  persist(); render();
+}
+
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
 function render(){
-  const app=document.getElementById('app');
-  
-  if(!DB.children.length){
-    app.innerHTML=`<div class="empty-state">
-      <div class="empty-icon">👨‍👩‍👧</div>
-      <div class="empty-text">Belum ada profil anak</div>
-      <button class="btn btn-primary" style="margin-top:20px;width:200px" onclick="addChild()">+ Tambah Anak</button>
+  const root=document.getElementById('root');
+  if(S.onboard){ root.innerHTML=renderOnboard(); return }
+  root.innerHTML=renderMain();
+}
+
+// ── ONBOARDING ──
+function renderOnboard(){
+  if(S.obStep===0){
+    return`<div class="onboard">
+      <div class="ob-logo ob-logo-pulse">📅</div>
+      <h1>GrowUp</h1>
+      <p>Aplikasi jadwal harian untuk membentuk<br>kebiasaan baik anak sejak dini 🌟</p>
+      <div class="ob-features">
+        <div class="ob-feat"><span class="ob-feat-icon">👨‍👩‍👧‍👦</span><div class="ob-feat-text"><strong>Multi Profil Anak</strong><span>Kelola jadwal beberapa anak sekaligus</span></div></div>
+        <div class="ob-feat"><span class="ob-feat-icon">⭐</span><div class="ob-feat-text"><strong>Sistem Bintang</strong><span>Motivasi anak dengan reward bintang harian</span></div></div>
+        <div class="ob-feat"><span class="ob-feat-icon">📊</span><div class="ob-feat-text"><strong>Riwayat Harian</strong><span>Lihat perkembangan kegiatan per hari</span></div></div>
+      </div>
+      <input class="ob-input" id="ob-name" placeholder="Nama anak pertama..." maxlength="20">
+      <div style="text-align:left;margin-bottom:8px;font-size:11px;font-weight:900;color:#64748b;letter-spacing:.5px">PILIH AVATAR</div>
+      <div class="ob-emoji-row">
+        ${AVATAR_OPTS.map(a=>`<div class="ob-emoji${a===S.obAvatar?' sel':''}" data-a="${a}" onclick="S.obAvatar='${a}';selectAvatar('${a}')">${a}</div>`).join('')}
+      </div>
+      <button class="ob-start" onclick="obNext()">Mulai Sekarang →</button>
     </div>`;
-    return;
   }
-
-  const ch=DB.children.find(c=>c.id===DB.activeId);
-  const acts=(DB.activities[DB.activeId]||[]).sort((a,b)=>toMin(a.time)-toMin(b.time));
-  const done=getDone(new Date());
-  const total=acts.length;
-  const pct=getPct(new Date());
-
-  let html=`<div class="topbar">
-    <div class="brand"><div class="brand-logo">⭐</div><span>GrowUp</span></div>
-    <div class="topbar-actions">
-      <button class="icon-btn" onclick="openModal('settings')">⚙️</button>
+  return`<div class="onboard">
+    <div style="font-size:70px;margin-bottom:16px">${S.obAvatar}</div>
+    <h1>Halo, ${esc(S.obName)}!</h1>
+    <p style="margin-bottom:28px">Jadwal harian sudah siap.<br>Yuk mulai hari yang produktif! 🚀</p>
+    <div class="ob-features" style="margin-bottom:28px">
+      <div class="ob-feat"><span class="ob-feat-icon">✅</span><div class="ob-feat-text"><strong>20 Kegiatan Sudah Tersedia</strong><span>Dari bangun tidur sampai tidur malam</span></div></div>
+      <div class="ob-feat"><span class="ob-feat-icon">✏️</span><div class="ob-feat-text"><strong>Bisa Dikustomisasi</strong><span>Tambah, hapus, dan atur kegiatan sendiri</span></div></div>
     </div>
+    <button class="ob-start" onclick="finishOnboard()">Buka Jadwal Saya ✨</button>
   </div>`;
+}
 
-  html+=`<div class="card">
-    <div class="card-title">Progress Hari Ini</div>
-    <div class="stat-row">
-      <div class="stat-box">
-        <div class="stat-num">${done}/${total}</div>
-        <div class="stat-label">Selesai</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">${pct}%</div>
-        <div class="stat-label">Progress</div>
-      </div>
-      <div class="stat-box">
-        <div class="stat-num">${'⭐'.repeat(Math.ceil(pct/20))}</div>
-        <div class="stat-label">Bintang</div>
-      </div>
-    </div>
-  </div>`;
+// ── MAIN APP ──
+function renderMain(){
+  const ch   = activeChild();
+  const acts = getActs();
+  const today = isToday(S.viewDate);
+  const done  = getDone(S.viewDate);
+  const total = acts.length;
+  const pct   = getPct(S.viewDate);
+  const stars = getStarCount(pct);
+  const curId = currentActId();
+  const allDone = today && done===total && total>0;
+  const pc    = ch?childColor(ch):'#7c3aed';
+  const pcl   = ch?childColorLight(ch):'#ede9fe';
 
-  html+=`<div class="card"><div class="card-title">Pilih Anak</div><div class="profile-row">
-    ${DB.children.map(c=>`<div class="profile-chip${c.id===DB.activeId?' active':''}" onclick="switchChild('${c.id}')">
-      <div class="profile-avatar">${c.avatar}</div>
+  // profiles row
+  let profHtml = S.children.map(c=>{
+    const cp  = childColor(c);
+    const cpct= childPct(c.id,S.viewDate);
+    const isAc= c.id===S.activeId;
+    return`<div class="profile-chip" onclick="switchChild('${c.id}')">
+      <div class="profile-avatar${isAc?' active':''}" style="background:${childColorLight(c)};--pc:${cp}">
+        <span style="font-size:26px">${c.avatar}</span>
+        ${cpct>=100?'<span class="badge-done">100%</span>':cpct>0?`<span class="badge-done">${cpct}%</span>`:''}
+      </div>
       <div class="profile-name">${esc(c.name)}</div>
-    </div>`).join('')}
-    <div class="profile-chip" onclick="addChild()" style="justify-content:center">
-      <div class="profile-avatar">➕</div>
-      <div class="profile-name">Tambah</div>
-    </div>
-  </div></div>`;
+    </div>`;
+  }).join('');
+  profHtml+=`<div style="display:flex;flex-direction:column;align-items:center;gap:5px;min-width:68px">
+    <div class="profile-add" onclick="openAddChild()" title="Tambah anak">＋</div>
+    <div class="profile-name" style="color:#94a3b8">Tambah</div>
+  </div>`;
 
-  html+=`<div class="card"><div class="card-title">Kegiatan Hari Ini</div>`;
-  if(acts.length){
-    acts.forEach(a=>{
-      html+=`<div class="act-card${a.done?' done':''}" onclick="toggleDone(${a.id})">
-        <span class="act-emoji">${a.emoji}</span>
+  // stars
+  const starHtml=Array.from({length:5},(_,i)=>
+    `<span class="star${i<stars?' lit':''}">${i<stars?'⭐':'☆'}</span>`
+  ).join('');
+
+  // grouped activities
+  const sorted=[...acts].sort((a,b)=>toMin(a.time)-toMin(b.time));
+  const groups={morning:[],afternoon:[],evening:[],night:[]};
+  sorted.forEach(a=>{if(groups[a.session])groups[a.session].push(a)});
+
+  let actHtml='';
+  ['morning','afternoon','evening','night'].forEach(sess=>{
+    const list=groups[sess];
+    if(!list.length) return;
+    const info=SESSIONS[sess];
+    actHtml+=`<div class="section-hdr ${info.cls}">
+      <span class="section-icon">${info.icon}</span>
+      <span class="section-title">${info.label}</span>
+      <div class="section-line"></div>
+    </div>`;
+    list.forEach((a,i)=>{
+      const isNow=a.id===curId&&today;
+      actHtml+=`<div class="act-card ${a.done?'done':''} ${isNow?'active-now':''}" style="animation-delay:${i*.04}s" onclick="toggleDone(${a.id})">
+        ${isNow?'<span class="now-pill">▶ SEKARANG</span>':''}
+        <span class="time-badge tb-${sess}">${a.time}</span>
+        <div class="act-emoji">${a.emoji}</div>
         <div class="act-info">
           <div class="act-name">${esc(a.name)}</div>
-          <div class="act-time">${a.time}</div>
+          ${a.desc?`<div class="act-desc">${esc(a.desc)}</div>`:''}
         </div>
-        <button class="check-btn${a.done?' done':''}" onclick="event.stopPropagation();toggleDone(${a.id})">${a.done?'✓':''}</button>
+        <div class="act-actions">
+          <button class="del-btn" onclick="event.stopPropagation();deleteAct(${a.id})" title="Hapus">✕</button>
+          <button class="check-btn${a.done?' done':''}" onclick="event.stopPropagation();toggleDone(${a.id})">${a.done?'✓':''}</button>
+        </div>
       </div>`;
     });
-  }else{
-    html+=`<div style="text-align:center;padding:20px;color:var(--text-soft)">Belum ada kegiatan</div>`;
-  }
-  html+=`</div>`;
+  });
+  if(!actHtml) actHtml=`<div class="empty-state"><div class="big">📋</div><p>Belum ada kegiatan.<br>Tap + Tambah Kegiatan</p></div>`;
 
-  html+=`<div class="bottom-actions">
-    <button class="btn btn-primary" onclick="openModal('addActivity')">+ Kegiatan</button>
+  let html=`
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-logo">📅</div>
+      <div>
+        <div class="brand-name">GrowUp</div>
+        <div class="brand-tag">JADWAL HARIAN ANAK</div>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" onclick="openModal('settings')" title="Pengaturan">⚙️</button>
+    </div>
+  </div>
+
+  <div class="profiles-scroll"><div class="profiles-row">${profHtml}</div></div>
+
+  <div class="header-card" style="background:linear-gradient(145deg,${pc}dd,${pc})">
+    <div class="hc-bg1"></div><div class="hc-bg2"></div>
+    <div class="hc-top">
+      <div class="hc-child">
+        <div class="hc-avatar">${ch?.avatar||'👧'}</div>
+        <div class="hc-info">
+          <h2>${esc(ch?.name||'Anak')}</h2>
+          <p>${done}/${total} kegiatan selesai</p>
+        </div>
+      </div>
+      <button class="hc-edit" onclick="openEditChild('${S.activeId}')">✏️ Edit</button>
+    </div>
+    <div class="date-nav">
+      <button class="dn-btn" onclick="changeDate(-1)">‹</button>
+      <div class="dn-date">
+        <div class="dn-day">${DAYS_ID[S.viewDate.getDay()]}</div>
+        <div class="dn-full">${fmtDate(S.viewDate)}</div>
+      </div>
+      <button class="dn-btn" onclick="changeDate(1)" ${today?'disabled':''}>›</button>
+      ${today?'<span class="today-pill">HARI INI</span>':''}
+    </div>
+    <div class="progress-block">
+      <div class="pb-row">
+        <span class="pb-label">📈 Progress</span>
+        <span class="pb-pct">${pct}%</span>
+      </div>
+      <div class="pb-track"><div class="pb-fill" style="width:${pct}%"></div></div>
+      <div class="stars-row">${starHtml}</div>
+    </div>
+  </div>
+
+  ${allDone?`<div class="celebration">🎉 Luar Biasa ${esc(ch?.name||'')}! Semua Kegiatan Selesai! 🏆🌟</div>`:''}
+
+  ${actHtml}
+
+  <div class="bottom-bar">
+    <button class="ac-btn btn-add-act" style="background:${pc};box-shadow:0 4px 16px ${pc}55" onclick="openModal('addAct')">＋ Tambah Kegiatan</button>
+    ${today?`<button class="ac-btn btn-reset" onclick="resetDay()">🔄 Reset</button>`:''}
+  </div>
+
+  <div class="app-footer">
+    <strong>GrowUp</strong> — Membentuk Kebiasaan Baik Sejak Dini 🌟<br>
+    © ${new Date().getFullYear()} GrowUp App
   </div>`;
 
-  app.innerHTML=html;
+  // ── MODALS ──
+  if(S.modal==='addAct'){
+    const emojiOpts=EMOJI_OPTS.map(e=>`<div class="eg-opt${e===S.selectedEmoji?' sel':''}" data-e="${e}" onclick="selectEmoji('${e}')">${e}</div>`).join('');
+    html+=`<div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <h3>➕ Tambah Kegiatan</h3>
+        <div class="form-g"><label>Pilih Emoji</label>
+          <div class="emoji-grid">${emojiOpts}</div>
+          <input id="m-emoji" value="${esc(S.selectedEmoji)}" placeholder="atau ketik emoji..." style="width:110px;font-size:19px;text-align:center">
+        </div>
+        <div class="form-g"><label>Nama Kegiatan *</label><input id="m-name" placeholder="Contoh: Les Piano..." maxlength="40"></div>
+        <div class="form-row">
+          <div class="form-g"><label>Waktu</label><input id="m-time" type="time" value="08:00"></div>
+          <div class="form-g"><label>Sesi</label>
+            <select id="m-session">
+              <option value="morning">☀️ Pagi</option>
+              <option value="afternoon">🌤️ Siang</option>
+              <option value="evening">🌇 Sore</option>
+              <option value="night">🌙 Malam</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-g"><label>Keterangan (opsional)</label><input id="m-desc" placeholder="Catatan singkat..." maxlength="60"></div>
+        <div class="modal-btns">
+          <button class="mbtn-cancel" onclick="closeModal()">Batal</button>
+          <button class="mbtn-save" style="background:${pc}" onclick="saveActivity()">💾 Simpan</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(S.modal==='addChild'){
+    const colorDots=CHILD_COLORS.map((c,i)=>`<div class="color-dot${i===S.selColor?' sel':''}" style="background:${c}" onclick="selectColor(${i})"></div>`).join('');
+    const avOpts=AVATAR_OPTS.map(a=>`<div class="ob-emoji av-opt${a===S.selAvatar?' sel':''}" data-a="${a}" onclick="S.selAvatar='${a}';selectAvatar('${a}')">${a}</div>`).join('');
+    html+=`<div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <h3>👧 Tambah Profil Anak</h3>
+        <div class="form-g"><label>Nama Anak</label><input id="ac-name" placeholder="Masukkan nama anak..." maxlength="20"></div>
+        <div class="form-g"><label>Pilih Avatar</label>
+          <div class="ob-emoji-row" style="justify-content:flex-start;margin-bottom:0">${avOpts}</div>
+        </div>
+        <div class="form-g"><label>Warna Profil</label><div class="color-row">${colorDots}</div></div>
+        <div class="modal-btns">
+          <button class="mbtn-cancel" onclick="closeModal()">Batal</button>
+          <button class="mbtn-save" style="background:#7c3aed" onclick="addChild()">➕ Tambahkan</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(S.modal==='editChild'&&S.editChildId){
+    const ec=getChild(S.editChildId);
+    const colorDots=CHILD_COLORS.map((c,i)=>`<div class="color-dot${i===S.selColor?' sel':''}" style="background:${c}" onclick="selectColor(${i})"></div>`).join('');
+    const avOpts=AVATAR_OPTS.map(a=>`<div class="ob-emoji av-opt${a===S.selAvatar?' sel':''}" data-a="${a}" onclick="S.selAvatar='${a}';selectAvatar('${a}')">${a}</div>`).join('');
+    html+=`<div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <h3>✏️ Edit Profil ${esc(ec?.name||'')}</h3>
+        <div class="form-g"><label>Nama Anak</label><input id="ec-name" value="${esc(ec?.name||'')}" maxlength="20"></div>
+        <div class="form-g"><label>Pilih Avatar</label>
+          <div class="ob-emoji-row" style="justify-content:flex-start;margin-bottom:0">${avOpts}</div>
+        </div>
+        <div class="form-g"><label>Warna Profil</label><div class="color-row">${colorDots}</div></div>
+        <div class="modal-btns">
+          <button class="mbtn-danger" onclick="deleteChild('${S.editChildId}')">🗑️ Hapus</button>
+          <button class="mbtn-save" style="background:${pc}" onclick="saveEditChild()">💾 Simpan</button>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  if(S.modal==='settings'){
+    const manageHtml=S.children.map(c=>{
+      const cp=childColor(c);
+      const actsCount=(S.activities[c.id]||[]).length;
+      return`<div class="child-manage-item">
+        <div class="cmi-avatar" style="background:${childColorLight(c)}">${c.avatar}</div>
+        <div class="cmi-info">
+          <div class="cmi-name">${esc(c.name)}</div>
+          <div class="cmi-acts">${actsCount} kegiatan terdaftar</div>
+        </div>
+        <div class="cmi-btns">
+          <button class="cmi-btn cmi-edit" onclick="closeModal();openEditChild('${c.id}')">✏️</button>
+          ${S.children.length>1?`<button class="cmi-btn cmi-del" onclick="deleteChild('${c.id}')">🗑️</button>`:''}
+        </div>
+      </div>`;
+    }).join('');
+    html+=`<div class="overlay" onclick="if(event.target===this)closeModal()">
+      <div class="sheet">
+        <div class="sheet-handle"></div>
+        <h3>⚙️ Pengaturan</h3>
+        <div style="font-size:12px;font-weight:900;color:#64748b;letter-spacing:.8px;margin-bottom:10px">PROFIL ANAK</div>
+        ${manageHtml}
+        <button class="ac-btn btn-add-act" style="background:#7c3aed;margin-top:14px;width:100%;padding:12px" onclick="openAddChild()">＋ Tambah Profil Anak Baru</button>
+        <div style="margin-top:20px;padding:14px;background:#fef3c7;border-radius:14px;border-left:4px solid #f59e0b">
+          <div style="font-size:13px;font-weight:800;color:#92400e;margin-bottom:4px">💡 Tips Penjualan</div>
+          <div style="font-size:12px;color:#78350f;line-height:1.6">Aplikasi ini support hingga banyak anak. Cocok untuk keluarga dengan beberapa anak atau dijual ke sekolah/PAUD sebagai tools monitoring siswa.</div>
+        </div>
+        <div class="modal-btns"><button class="mbtn-cancel" style="flex:none;width:100%" onclick="closeModal()">Tutup</button></div>
+      </div>
+    </div>`;
+  }
+
+  return html;
 }
 
-// PWA Service Worker
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('data:application/javascript,self.addEventListener("install",e=>self.skipWaiting());self.addEventListener("activate",e=>self.clients.claim());self.addEventListener("fetch",e=>{if(e.request.method==="GET"){e.respondWith(fetch(e.request).catch(()=>new Response("Offline")))}})').catch(e=>console.log('SW error:',e));
+function openAddChild(){
+  S.selColor=S.children.length % CHILD_COLORS.length;
+  S.selAvatar='👧';
+  S.modal='addChild';
+  render();
 }
 
-// Install prompt
-if('BeforeInstallPromptEvent' in window){
-  let deferredPrompt;
-  window.addEventListener('beforeinstallprompt',e=>{
-    e.preventDefault();
-    deferredPrompt=e;
-  });
-}
-
-load();
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+hydrate();
 render();
-setInterval(render,60000);
+setInterval(()=>{ if(!S.onboard&&isToday(S.viewDate)) render(); },60000);
 </script>
 </body>
 </html>
